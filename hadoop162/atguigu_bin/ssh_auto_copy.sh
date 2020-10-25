@@ -1,5 +1,4 @@
 #!/bin/bash
-echo "本脚本值需要在容器创建成功之后第 1 次启动时在hadoop162上一次执行, 其他情况无序执行!!!"
 
 echo "开始配置免密登录......"
 for current in hadoop162 hadoop163 hadoop164 ; do
@@ -25,6 +24,8 @@ use mysql;
 update user set host='%' where user='root';
 flush privileges
 "
-echo -e "\033[30m 恭喜, msyql root用户密码已改为:aaaaaa \033[0m"
+echo -e "\033[34m 恭喜, msyql root用户密码已改为:aaaaaa \033[0m"
+
+echo -e "\033[31m 本脚本只需要在容器创建成功之后第 1 次启动时在hadoop162上一次执行, 其他情况无需执行!!! \033[0m"
 
 
