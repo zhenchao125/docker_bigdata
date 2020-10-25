@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo ----------Hadoop104----------
+sshpass -p aaa ssh root@hadoop164 "reboot"
+echo ----------Hadoop103----------
+sshpass -p aaa ssh root@hadoop163 "reboot"
+echo ----------Hadoop102----------
+sshpass -p aaa ssh root@hadoop162 "reboot"

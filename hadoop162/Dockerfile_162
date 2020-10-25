@@ -1,0 +1,27 @@
+############################################
+# 本镜像对 hadoop162 进行相应的配置
+############################################
+
+# 基础镜像 继承自 base 镜像
+FROM atguigu_bigdata_base:0.0.1
+
+# 作者信息
+MAINTAINER atguigu_lzc (lizhenchao@atguigu.com)
+
+USER atguigu
+# 格式化 namenode: #TODO 有问题, 必须等容器启动之后才能格式化namenode
+# RUN hdfs namenode -format
+
+# 修改 zookeeper id
+RUN   echo "162" > /opt/module/zookeeper-3.5.7/zkData/myid \
+   && sed -i 's/^broker.id.*$/broker.id=162/' /opt/module/kafka_2.11/config/server.properties `# 修改 kafka-broker 地址` \
+   && mkdir /home/atguigu/.ssh `# 生产 ssh 秘钥` \
+   && ssh-keygen -t rsa -N '' -f /home/atguigu/.ssh/id_rsa -q
+
+COPY --chown=atguigu:atguigu real_time/ /opt/software/
+
+# 一些常用的脚本
+COPY --chown=atguigu:atguigu atguigu_bin/* /home/atguigu/bin/
+RUN chmod +x /home/atguigu/bin/*
+
+USER root

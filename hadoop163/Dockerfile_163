@@ -1,0 +1,23 @@
+############################################
+# 本镜像对 hadoop163 进行相应的配置
+############################################
+
+# 基础镜像 继承自 base 镜像
+FROM atguigu_bigdata_base:0.0.1
+
+# 作者信息
+MAINTAINER atguigu_lzc (lizhenchao@atguigu.com)
+
+USER atguigu
+# 格式化 namenode: #TODO 有问题, 必须等容器启动之后才能格式化namenode
+# RUN hdfs namenode -format
+
+# 修改 zookeeper id
+RUN   echo "163" > /opt/module/zookeeper-3.5.7/zkData/myid \
+   && sed -i 's/^broker.id.*$/broker.id=163/' /opt/module/kafka_2.11/config/server.properties `# 修改 kafka-broker 地址` \
+   && mkdir /home/atguigu/.ssh `# 生产 ssh 秘钥` \
+   && ssh-keygen -t rsa -N '' -f /home/atguigu/.ssh/id_rsa -q
+
+
+
+USER root

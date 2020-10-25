@@ -1,0 +1,29 @@
+#!/bin/bash
+#1. 获取参数个数
+argscount=$#
+if [ $argscount == 0 ]
+then
+	echo 没有参数,输入你还要copy的目录, 然后重试
+	exit
+fi
+
+#2. 获取文件名称
+p1=$1
+fileName=$(basename $p1)
+echo fileName=$fileName
+
+#3. 获取上级目录的绝对路径
+fileDir=$(cd -P $(dirname $p1);pwd)
+echo fileDir=$fileDir
+
+#4. 获取当前用户名
+user=$(whoami)
+echo user=$user
+
+#5. 循环同步copy文件
+for((host=103;host<105;host++))
+do
+    echo --------开始向主机:hadoop$host copy 文件--------
+    rsync -rvl $p1 $user@hadoop$host:$fileDir
+    echo --------结束向主机:hadoop$host copy 文件--------
+done

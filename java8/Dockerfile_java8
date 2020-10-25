@@ -1,0 +1,25 @@
+########################
+# java8 镜像
+########################
+
+FROM centos:7.5.1804
+# 作者信息
+MAINTAINER atguigu_lzc (lizhenchao@atguigu.com)
+
+# 添加 atguigu 用户 修改/opt /opt/module /opt/software 权限
+RUN useradd atguigu \
+    && echo 'atguigu:aaaaaa' | chpasswd \
+    && mkdir -p /opt/software \
+    && mkdir -p /opt/module \
+    && chmod 777 /opt \
+    && chmod 777 /opt/module \
+    && chmod 777 /opt/software \
+    && echo 'root:aaaaaa' | chpasswd  # 更改 root 用户登录密码为
+
+USER atguigu
+COPY --chown=atguigu:atguigu jdk-8u212-linux-x64.tar.gz /opt/software/
+RUN tar -zxvf /opt/software/jdk-8u212-linux-x64.tar.gz -C /opt/module \
+    && rm -rf /opt/software/jdk-8u212-linux-x64.tar.gz \
+    && JAVA_HOME=/opt/module/jdk1.8.0_212
+ENV PATH=$JAVA_HOME/bin:$PATH
+USER root

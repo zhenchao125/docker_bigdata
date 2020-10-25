@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [[ -n $1 ]]; then
+    cmd=$*
+else
+    cmd=jps
+fi
+
+for host in hadoop162 hadoop163 hadoop164 ; do
+    echo "========== $host ========="
+    ssh $host "source /etc/profile; $cmd"
+done
+

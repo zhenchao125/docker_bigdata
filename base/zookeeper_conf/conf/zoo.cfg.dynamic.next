@@ -1,0 +1,4 @@
+server.102=hadoop162:2888:3888:participant
+server.103=hadoop163:2888:3888:participant
+server.104=hadoop164:2888:3888:participant
+version=3200000000

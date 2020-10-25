@@ -1,0 +1,25 @@
+# 设置继承镜像
+FROM atguigu_bigdata_java8:0.0.1
+# 提供作者信息
+MAINTAINER atguigu_lzc (lizhenchao@atguigu.com)
+
+# 更换国内阿里云yum源
+USER root
+RUN curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo \
+    && sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo \
+    && yum makecache \
+    && yum install -y net-tools.x86_64 `# 安装 ifconfig 网络工具` \
+    && yum install -y openssh-server openssh-clients `# 安装sshd` \
+    && sed -i '/^HostKey/'d /etc/ssh/sshd_config \
+    && echo 'HostKey /etc/ssh/ssh_host_rsa_key'>>/etc/ssh/sshd_config \
+    && echo 'UseDNS no' >> /etc/ssh/sshd_config \
+    && ssh-keygen -t rsa -b 2048 -f /etc/ssh/ssh_host_rsa_key `# 生成 ssh-key`
+
+# 开放 22 端口
+EXPOSE 22
+# 镜像运行时启动sshd
+RUN  mkdir -p /opt \
+  && echo '#!/bin/bash' >> /opt/run.sh \
+  && echo '/usr/sbin/sshd -D' >> /opt/run.sh \
+  && chmod +x /opt/run.sh
+CMD ["/opt/run.sh"]

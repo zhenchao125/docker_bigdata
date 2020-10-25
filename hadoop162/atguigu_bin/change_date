@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for host in hadoop162 hadoop163 hadoop164 ; do
+    echo "========== $host ========="
+    ssh $host "source /etc/profile ; sudo date -s $1"
+done
+

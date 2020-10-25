@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo ----------Hadoop104----------
+sshpass -p aaa ssh root@192.168.$1.104 "sed -i s/192.168.$1/192.168.$2/g `grep 192.168.$1 -rl /etc/sysconfig/network-scripts/ifcfg-eth0` ; cat /etc/sysconfig/network-scripts/ifcfg-eth0 ; sed -i s/192.168.$1/192.168.$2/g `grep 192.168.$1 -rl /etc/hosts` ; cat /etc/hosts ;"
+sshpass -p aaa ssh root@192.168.$1.104 "reboot"
+
+echo ----------Hadoop103----------
+sshpass -p aaa ssh root@192.168.$1.103 "sed -i s/192.168.$1/192.168.$2/g `grep 192.168.$1 -rl /etc/sysconfig/network-scripts/ifcfg-eth0` ; cat /etc/sysconfig/network-scripts/ifcfg-eth0 ; sed -i s/192.168.$1/192.168.$2/g `grep 192.168.$1 -rl /etc/hosts` ; cat /etc/hosts ; "
+sshpass -p aaa ssh root@192.168.$1.103 "reboot"
+
+echo ----------Hadoop102----------
+sshpass -p aaa ssh root@192.168.$1.102 "sed -i s/192.168.$1/192.168.$2/g `grep 192.168.$1 -rl /etc/sysconfig/network-scripts/ifcfg-eth0` ; cat /etc/sysconfig/network-scripts/ifcfg-eth0 ; sed -i s/192.168.$1/192.168.$2/g `grep 192.168.$1 -rl /etc/hosts` ; cat /etc/hosts ; "
+sshpass -p aaa ssh root@192.168.$1.102 "reboot"

@@ -1,0 +1,2 @@
+#!/bin/bash
+/opt/module/kafka_2.11/bin/kafka-console-producer.sh --broker-list hadoop162:9092 --topic $1
