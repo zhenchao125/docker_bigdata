@@ -1,5 +1,8 @@
 # 注意
 
+## 由于 git 不支持大文件, 所以一些安装包 push 不上去.请在下面的地址下载完整资料:
+链接: https://pan.baidu.com/s/1c3GvHUxai5d-rozNE3BiaA  密码: i183
+
 ## 目录说明
 - 不要更改`docker_bigdata`及子目录的目录结构
 - 进入到`docker_bigdata`目录下再执行脚本
