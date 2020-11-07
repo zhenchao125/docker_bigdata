@@ -7,15 +7,17 @@ case $1 in
         # 获取 eth0 或者 eth33 的 ip
         if [ -n "$(ifconfig | grep eth0)" ]; then
             ip=$(ifconfig eth0 | awk '/inet / { print $2 }')
+            device=eth0
         else
             ip=$(ifconfig eth33 | awk '/inet / { print $2 }')
+            device=ens33
         fi
         gateway=$(ip route show | awk '/default/ {print $3}')
         echo ""
         echo "开始搭建网桥...."
         sudo brctl addbr br0; \
         sudo ip link set dev br0 up; \
-        sudo ip addr del "$ip"/24 dev eth0 ; \
+        sudo ip addr del "$ip"/24 dev $device; \
         sudo ip addr add "$ip"/24 dev br0 ; \
         sudo brctl addif br0 eth0 ; \
         sudo ip route add default via "$gateway" dev br0
