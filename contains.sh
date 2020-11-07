@@ -9,7 +9,7 @@ case $1 in
             ip=$(ifconfig eth0 | awk '/inet / { print $2 }')
             device=eth0
         else
-            ip=$(ifconfig eth33 | awk '/inet / { print $2 }')
+            ip=$(ifconfig ens33 | awk '/inet / { print $2 }')
             device=ens33
         fi
         gateway=$(ip route show | awk '/default/ {print $3}')
