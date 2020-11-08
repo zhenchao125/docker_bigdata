@@ -19,7 +19,7 @@ case $1 in
         sudo ip link set dev br0 up; \
         sudo ip addr del "$ip"/24 dev $device; \
         sudo ip addr add "$ip"/24 dev br0 ; \
-        sudo brctl addif br0 eth0 ; \
+        sudo brctl addif br0 $device ; \
         sudo ip route add default via "$gateway" dev br0
         echo "网桥 br0 搭建成功"
     else
