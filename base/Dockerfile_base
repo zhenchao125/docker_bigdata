@@ -10,27 +10,11 @@
 FROM atguigu_bigdata_ssh:0.0.1
 
 # 作者信息
-MAINTAINER atguigu_lzc (lizhenchao@atguigu.com)
-
-# 安装 wget vim  sshpass  rsync
-RUN    yum install -y wget \
-    && wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo \
-    && yum install -y vim sshpass rsync sudo openssl openssl-devel pcre pcre-devel zlib zlib-devel gcc gcc-c++ \
-    && echo "set encoding=utf-8" >> /root/.vimrc `# 避免中文乱码` \
-    && echo "set fileencodings=ucs-bom,utf-8,cp936" >> /root/.vimrc \
-    && echo "set fileencoding=gb2312" >> /root/.vimrc\
-    && echo "set termencoding=utf-8" >> /root/.vimrc \
-    && echo "atguigu    ALL=(ALL)   NOPASSWD:ALL" >> /etc/sudoers
-
-# 使用 user 用户
-USER atguigu
-RUN    echo "set encoding=utf-8" >> /home/atguigu/.vimrc \
-    && echo "set fileencodings=ucs-bom,utf-8,cp936" >> /home/atguigu/.vimrc \
-    && echo "set fileencoding=gb2312" >> /home/atguigu/.vimrc \
-    && echo "set termencoding=utf-8" >> /home/atguigu/.vimrc
+MAINTAINER atguigu_lzc (lizhenchao@atguigu.cn)
 
 #######################################################
 #################### copy 安装包开始 ###################
+USER atguigu
 # 定义变量
 ARG hadoop=/opt/module/hadoop-3.1.3
 ARG zookeeper=/opt/module/zookeeper-3.5.7

@@ -1,9 +1,9 @@
 # 设置继承镜像
 FROM atguigu_bigdata_java8:0.0.1
 # 提供作者信息
-MAINTAINER atguigu_lzc (lizhenchao@atguigu.com)
+MAINTAINER atguigu_lzc (lizhenchao@atguigu.cn)
 
-# 更换国内阿里云yum源
+# 更换国内阿里云yum源, 安装 sshd
 USER root
 RUN curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo \
     && sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo \
@@ -15,11 +15,53 @@ RUN curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Cen
     && echo 'UseDNS no' >> /etc/ssh/sshd_config \
     && ssh-keygen -t rsa -b 2048 -f /etc/ssh/ssh_host_rsa_key `# 生成 ssh-key`
 
-# 开放 22 端口
-EXPOSE 22
+
+# 安装 wget vim  sshpass  rsync
+RUN    yum install -y wget \
+    && wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo \
+    && yum install -y vim sshpass rsync sudo openssl openssl-devel pcre pcre-devel zlib zlib-devel gcc gcc-c++ \
+    && echo "set encoding=utf-8" >> /root/.vimrc `# 避免中文乱码` \
+    && echo "set fileencodings=ucs-bom,utf-8,cp936" >> /root/.vimrc \
+    && echo "set fileencoding=gb2312" >> /root/.vimrc\
+    && echo "set termencoding=utf-8" >> /root/.vimrc \
+    && echo "atguigu    ALL=(ALL)   NOPASSWD:ALL" >> /etc/sudoers
+
+USER atguigu
+RUN    echo "set encoding=utf-8" >> /home/atguigu/.vimrc \
+    && echo "set fileencodings=ucs-bom,utf-8,cp936" >> /home/atguigu/.vimrc \
+    && echo "set fileencoding=gb2312" >> /home/atguigu/.vimrc \
+    && echo "set termencoding=utf-8" >> /home/atguigu/.vimrc
+
+
+# 为 atguigu 用户安装 zsh+oh-my-zsh+autojump
+USER atguigu
+RUN    sudo yum install -y zsh \
+    && sudo yum install -y git \
+    && git clone https://gitee.com/mirrors/oh-my-zsh.git ~/.oh-my-zsh \
+    && cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc \
+    && sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="af-magic"/' ~/.zshrc \
+    && git clone https://gitee.com/lzc2025/fonts.git --depth=1 ~/fonts \
+    && ~/fonts/install.sh \
+    && rm -rf ~/fonts \
+    && sudo sed -i 's/atguigu:x:1000:1000::\/home\/atguigu:\/bin\/bash/atguigu:x:1000:1000::\/home\/atguigu:\/bin\/zsh/' /etc/passwd \
+    && sudo yum install -y autojump-zsh \
+    && git clone https://gitee.com/lzc2025/zsh-syntax-highlighting.git ~/zsh-syntax-highlighting \
+    && echo "source /home/atguigu/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc \
+    && echo "ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=blue,underline" >> ~/.zshrc \
+    && echo "ZSH_HIGHLIGHT_STYLES[precommand]=fg=magenta,underline" >> ~/.zshrc \
+    && echo "ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=red" >> ~/.zshrc \
+    && echo "ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=red" >> ~/.zshrc \
+    && echo "ZSH_HIGHLIGHT_STYLES[arg0]=fg=blue,bold" >> ~/.zshrc \
+    && echo "ZSH_HIGHLIGHT_STYLES[alias]='fg=blue,bold,underline'" >> ~/.zshrc
+
+USER root
 # 镜像运行时启动sshd
 RUN  mkdir -p /opt \
   && echo '#!/bin/bash' >> /opt/run.sh \
   && echo '/usr/sbin/sshd -D' >> /opt/run.sh \
   && chmod +x /opt/run.sh
+
+# 开放 22 端口
+EXPOSE 22
+
 CMD ["/opt/run.sh"]

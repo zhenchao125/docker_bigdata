@@ -4,7 +4,7 @@
 
 FROM centos:7.5.1804
 # 作者信息
-MAINTAINER atguigu_lzc (lizhenchao@atguigu.com)
+MAINTAINER atguigu_lzc (lizhenchao@atguigu.cn)
 
 # 添加 atguigu 用户 修改/opt /opt/module /opt/software 权限
 RUN useradd atguigu \

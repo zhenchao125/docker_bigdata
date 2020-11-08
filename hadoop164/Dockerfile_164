@@ -6,7 +6,7 @@
 FROM atguigu_bigdata_base:0.0.1
 
 # 作者信息
-MAINTAINER atguigu_lzc (lizhenchao@atguigu.com)
+MAINTAINER atguigu_lzc (lizhenchao@atguigu.cn)
 
 USER atguigu
 # 格式化 namenode: #TODO 有问题, 必须等容器启动之后才能格式化namenode
