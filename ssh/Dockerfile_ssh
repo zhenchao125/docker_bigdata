@@ -54,7 +54,9 @@ RUN    sudo yum install -y zsh \
     && echo "ZSH_HIGHLIGHT_STYLES[arg0]=fg=blue,bold" >> ~/.zshrc \
     && echo "ZSH_HIGHLIGHT_STYLES[alias]='fg=blue,bold,underline'" >> ~/.zshrc
 
+
 USER root
+RUN echo "source /etc/profile" >> /etc/zshenv
 # 镜像运行时启动sshd
 RUN  mkdir -p /opt \
   && echo '#!/bin/bash' >> /opt/run.sh \
